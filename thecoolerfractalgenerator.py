@@ -6,7 +6,7 @@ import numpy as np
 from shapely.geometry import *
 import shapely._geos
 root=tkinter.Tk()
-root.title("The olde fractal generator")
+root.title("Ye olde fractal generator")
 H,W=600,600
 canvas=tkinter.Canvas(root,bg="black",height=H,width=W)
 all_vertices=[
@@ -59,8 +59,6 @@ def generate_chaos_game(iterations,vertices,division):
         division=eval(division)
     if iterations=='':
         iterations='20000'
-    if int(iterations)>=10000 and animate.get():
-        iterations='10000'
     s=get_random_point_in_polygon(Polygon(vertices))
     vertice = random.choice(vertices)
     fractal_point=get_line_division(division,p1=s,p2=vertice)
@@ -104,7 +102,9 @@ def generate_chaos_game(iterations,vertices,division):
         if ba.get():
             generate_eye(fractal_point[0],fractal_point[1])
         else:
-            canvas.create_oval(fractal_point[0]-1,fractal_point[1]-1,fractal_point[0]+1,fractal_point[1]+1,fill='white',tags='all')
+            cf=distance(fractal_point,center)/12.5
+            color="#{:02x}{:02x}{:02x}".format(int((1 + math.sin(0.3*cf)) * 127),int((1 + math.sin(0.3*cf+2)) * 127),int((1 + math.sin(0.3*cf+4)) * 127))
+            canvas.create_rectangle(fractal_point[0],fractal_point[1],fractal_point[0],fractal_point[1],outline='',fill=color,tags='all')
         if animate.get():
             canvas.update()
     if pd.get():
@@ -125,7 +125,7 @@ def generate_barnsley_fern():
     x=[0]
     y=[0]
     num=0
-    for _ in range(60000):
+    for _ in range(200000):
         chance=random.randint(0,100)
         if chance==0:
             x.append(0)
@@ -142,7 +142,9 @@ def generate_barnsley_fern():
         if lc.get():
             print(x[-1],y[-1],chance)
         num+=1
-        canvas.create_oval(300+60*x[num]-1-50,600-60*y[num]-1,300+60*x[num]+1-50,600-60*y[num]+1,fill='white',tags='all')
+        cf=distance([300+60*x[num]-50,600-60*y[num]],[250,600])/25
+        color="#{:02x}{:02x}{:02x}".format(int((1 + math.sin(0.3*cf)) * 127),int((1 + math.sin(0.3*cf + 2)) * 127),int((1 + math.sin(0.3*cf+4)) * 127))
+        canvas.create_rectangle(300+60*x[num]-50,600-60*y[num],300+60*x[num]-50,600-60*y[num],fill=color,outline='',tags='all')
 
 def delete_all():
     canvas.delete('all')
@@ -151,7 +153,9 @@ def delete_all():
 def generate_eye(x,y):
     canvas.create_oval(x-10,y-5,x+10,y+5,fill='white',tags='all')
     canvas.create_oval(x-3,y-3,x+3,y+3,fill='black',tags='all')
-    
+
+def distance(p1,p2):
+    return math.sqrt((p1[0]-p2[0])**2+(p1[1]-p2[1])**2)
 button_frame=Frame()
 button_frame.pack(side='bottom')
 

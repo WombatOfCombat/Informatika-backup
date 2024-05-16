@@ -31,7 +31,7 @@ def check(event):
     if distance([xm,ym],target_point)<=5:
         score=round(score+1+(luminousity//50-1)/10,1)
         luminousity=random.randint(50,200)
-        target_point=[20*random.randint(0,W/20),20*random.randint(0,H/20-1)]
+        target_point=[20*random.randint(20,W/20-1),20*random.randint(20,H/20-1)]
     else:
         score=round(score-0.1*(6-luminousity//50),1)
     if score<=0:
@@ -41,7 +41,7 @@ def distance(p1,p2):
     return math.sqrt((p1[0]-p2[0])**2+(p1[1]-p2[1])**2)
 def startup():
     global target_point,score,luminousity,xm,ym
-    target_point=[20*random.randint(0,W/20),20*random.randint(0,H/20-1)]
+    target_point=[20*random.randint(20,W/20-1),20*random.randint(20,H/20-1)]
     score=1
     xm,ym=0,0
     luminousity=random.randint(50,255)
